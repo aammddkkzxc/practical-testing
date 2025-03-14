@@ -3,6 +3,7 @@ package com.example.cafekiosk.unit;
 import com.example.cafekiosk.unit.beverage.Americano;
 import com.example.cafekiosk.unit.beverage.Latte;
 import com.example.cafekiosk.unit.order.Order;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -12,6 +13,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 class CafeKioskTest {
 
+//    @DisplayName("음료 1개 추가 테스트")
+    @DisplayName("음료 1개를 추가하면 주문 목록에 담긴다.")
     @Test
     void add() {
         CafeKiosk cafeKiosk = new CafeKiosk();
@@ -105,14 +108,18 @@ class CafeKioskTest {
 
     @Test
     void calculateTotalPrice() {
+        //given : 테스트 상황 설정
         CafeKiosk cafeKiosk = new CafeKiosk();
         Americano americano = new Americano();
         Latte latte = new Latte();
 
         cafeKiosk.add(americano, 1);
         cafeKiosk.add(latte, 1);
+
+        //when : 테스트 하고자 하는 시나리오
         int totalPrice = cafeKiosk.calculateTotalPrice();
 
+        //then : 검증 단계
         assertThat(totalPrice).isEqualTo(8500);
     }
 
