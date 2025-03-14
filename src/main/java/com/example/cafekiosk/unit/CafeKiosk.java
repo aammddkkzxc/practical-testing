@@ -47,6 +47,10 @@ public class CafeKiosk {
         return totalPrice;
     }
 
+//    public int calculateTotalPrice() {
+//        return 8500;
+//    }
+
     // 테스트 하기 어려움
     public Order createOrder() {
         LocalDateTime currentDateTime = LocalDateTime.now();
