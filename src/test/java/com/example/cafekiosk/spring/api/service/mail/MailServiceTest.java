@@ -6,6 +6,7 @@ import com.example.cafekiosk.spring.domain.history.mail.MailSendHistoryRepositor
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Spy;
@@ -18,11 +19,11 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class MailServiceTest {
 
-//    @Mock
-//    private MailSendClient mailSendClient;
-
-    @Spy
+    @Mock
     private MailSendClient mailSendClient;
+
+//    @Spy
+//    private MailSendClient mailSendClient;
 
     @Mock
     private MailSendHistoryRepository mailSendHistoryRepository;
@@ -35,9 +36,11 @@ class MailServiceTest {
     void sendMail() {
         //given
 //        when(mailSendClient.sendEmail(anyString(), anyString(), anyString(), anyString())).thenReturn(true);
-        doReturn(true)
-                .when(mailSendClient)
-                .sendEmail(anyString(), anyString(), anyString(), anyString());
+//        doReturn(true)
+//                .when(mailSendClient)
+//                .sendEmail(anyString(), anyString(), anyString(), anyString());
+        BDDMockito.given(mailSendClient.sendEmail(anyString(), anyString(), anyString(), anyString()))
+                .willReturn(true);
 
         //when
         boolean result = mailService.sendMail("", "", "", "");
