@@ -1,5 +1,6 @@
 package com.example.cafekiosk.spring.api.service.order;
 
+import com.example.cafekiosk.spring.IntegrationTestSupport;
 import com.example.cafekiosk.spring.api.controller.order.request.OrderCreateRequest;
 import com.example.cafekiosk.spring.api.service.order.response.OrderResponse;
 import com.example.cafekiosk.spring.domain.order.OrderRepository;
@@ -27,11 +28,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.groups.Tuple.tuple;
 
-@ActiveProfiles("test")
+//@ActiveProfiles("test")
 //@DataJpaTest
-@SpringBootTest
+//@SpringBootTest
 //@Transactional
-class OrderServiceTest {
+class OrderServiceTest extends IntegrationTestSupport {
 
     @Autowired
     private ProductRepository productRepository;
