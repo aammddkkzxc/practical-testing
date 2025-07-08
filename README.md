@@ -1,5 +1,6 @@
-## 주요 내용 정리
-- [Practical Testing: 실용적인 테스트 가이드](https://www.inflearn.com/course/practical-testing-%EC%8B%A4%EC%9A%A9%EC%A0%81%EC%9D%B8-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EA%B0%80%EC%9D%B4%EB%93%9C/dashboard), [단위 테스트](https://product.kyobobook.co.kr/detail/S000001805070)를 학습하고 정리한 내용입니다
+## 테스트 코드의 문서화
+- 테스트 코드의 명확한 문서화를 위하여 공부한 내용 중 개인적으로 기억하고 싶은 내용을 정리 하였습니다
+- 출처 : [단위 테스트](https://product.kyobobook.co.kr/detail/S000001805070), [Practical Testing: 실용적인 테스트 가이드](https://www.inflearn.com/course/practical-testing-%EC%8B%A4%EC%9A%A9%EC%A0%81%EC%9D%B8-%ED%85%8C%EC%8A%A4%ED%8A%B8-%EA%B0%80%EC%9D%B4%EB%93%9C/dashboard)
 
 ### 좋은 테스트와 TDD
 - 이점
@@ -10,7 +11,6 @@
 - 주의점
   - 테스트 커버리지를 목표로 하지 말자
   - 커버리지 지표는 괜찮은 부정 지표지만 동시에 좋지 않은 긍정 지표다.
-  - 너무 단순한 조회 메서드 같은 경우는 테스트 코드를 만들지 않아도 무방하다. 단 한줄이라도 비지니스와 직결된다면 (ex boolean형 판별) 실수 방지를 위해서라도 작성
 - 좋은 테스트의 특징
   - 개발 주기에 통합되어 있다 (프로덕션 코드 변경될 때마다 진행)
   - 가장 중요한 부분을 대상으로 한다 (비지니스 로직)
@@ -29,8 +29,10 @@
 - 경계값 테스트 
   - 버그가 발생하기 쉬운 경계값(Boundary)을 중심으로 테스트 케이스를 설계하여 코드의 안정성을 높인다
 - 검증시의 반복문 사용
-  - 검증할 케이스가 많을 때 반복문을 사용하면 코드가 간결해질 수 있다. 
+  - 검증할 케이스가 많을 때 반복문을 사용하면 코드가 간결해질 수 있다
   - 하지만 복잡한 반복문은 테스트의 의도를 파악하기 어렵게 만들 수 있으므로, 가독성을 해치지 않는 선에서 사용
+- 너무 단순한 조회 메서드 같은 경우는 테스트 코드를 만들지 않아도 무방하다
+  - 단 한줄이라도 비지니스와 직결된다면 (예: boolean형 판별)실수 방지를 위해서라도 작성 하자
 
 #### 2. 테스트 가능한 코드 설계 원칙
 - 테스트하기 어려운 영역 분리 
@@ -71,8 +73,8 @@
   - 서비스 계층의 DTO가 컨트롤러로 직접 노출되지 않도록, 컨트롤러 전용 DTO를 서비스 DTO로 변환하여 전달하는 것을 권장(단, 포맷 변경 가능성이 거의 없다면 동일 DTO를 사용하기도 한다)
   - API 명세 자동화를 위해 RestDocs와 같은 라이브러리를 활용할 수 있다
 - 테스트 방법: 슬라이스 테스트 (Slice Test)
-  - `@WebMvcTest` 어노테이션을 사용하여 Presentation Layer 관련 빈(`@Controller`, `@RestController` 등)만 로드
-  - `MockMvc`를 사용하여 HTTP 요청과 응답을 시뮬레이션하며 컨트롤러의 동작을 검증
+  - `@WebMvcTest` 어노테이션을 사용하여 Presentation Layer 관련 빈(`@Controller`, `@RestController` 등)만 로드.
+  - `MockMvc` 테스트용 MVC 환경을 만들어 HTTP 요청과 응답을 시뮬레이션하며 컨트롤러의 동작을 검증. `@WebMvcTest`내부적으로 `@AutoConfigureMockMvc`을 사용, MockMvc 객체가 자동으로 빈으로 등록되어 주입만 받으면 되나.
   - 의존하는 하위 레이어(Business, Persistence)는 `Mockito` 프레임워크를 사용하여 가짜 객체(Mock)로 대체
 
 #### Business Layer (비즈니스 계층)
@@ -103,7 +105,7 @@
 
 | 어노테이션           | 설명 | 주요 특징 및 주의사항                                                                                                                                                   |
 |-----------------| --- |----------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `@SpringBootTest` | 통합 테스트용. 모든 빈을 로드하여 실제 운영 환경과 유사한 테스트를 수행합니다 | 무겁고 테스트 시간이 오래 걸릴 수 있다                                                                                                                                         |
+| `@SpringBootTest` | 통합 테스트용. 모든 빈을 로드하여 실제 운영 환경과 유사한 테스트를 수행합 | 무겁고 테스트 시간이 오래 걸릴 수 있다                                                                                                                                         |
 | `@DataJpaTest`  | JPA 슬라이스 테스트용. JPA 관련 빈(`@Repository` 등)만 로드. | - `@Transactional`이 내장되어 자동 롤백                                                                                                                                 |
 | `@WebMvcTest`   | MVC 슬라이스 테스트용. Presentation Layer 관련 빈(`@Controller` 등)만 로드 | - `@Service`, `@Repository` 등은 로드되지 않으므로 `@MockBean`으로 가짜 객체를 만들어야 한다.<br>- JPA 관련 빈을 로드하지 않아 `@EnableJpaAuditing` 설정과 충돌할 수 있다. (별도 `@Configuration`으로 분리 필요) |
 | `@Transactional` | 메서드 종료 시 트랜잭션을 커밋 또는 롤백 | - **테스트 코드의 `@Transactional`은 기본적으로 롤백**.<br>- `@SpringBootTest`와 함께 사용 시, 서비스 로직의 트랜잭션 동작을 정확히 검증하기 어려울 수 있으니 주의해야 한다.                                        |
@@ -117,7 +119,7 @@
 
 | 어노테이션          | 패키지 | 대상 | 동작 방식                                                              | 주요 사용 사례 |
 |:---------------| :--- | :--- |:-------------------------------------------------------------------| :--- |
-| `@Mock`        | `org.mockito` | 일반 객체 | 완전한 가짜 객체를 생성합니다. 내부 메서드는 모두 `null`이나 기본값을 반환하며, 행위를 직접 정의해야 한다.   | 순수 단위 테스트 (Spring 컨텍스트 불필요) |
+| `@Mock`        | `org.mockito` | 일반 객체 | 완전한 가짜 객체를 생성. 내부 메서드는 모두 `null`이나 기본값을 반환하며, 행위를 직접 정의해야 한다.      | 순수 단위 테스트 (Spring 컨텍스트 불필요) |
 | `@MockBean`    | `org.springframework.boot` | Spring Bean | Spring 컨텍스트에 등록된 실제 빈(Bean)을 가짜 객체로 대체                             | 통합 테스트 또는 슬라이스 테스트 환경 |
 | `@Spy`         | `org.mockito` | 일반 객체 | 실제 객체를 감싸는 프록시 객체를 생성. 행위를 정의하지 않은 메서드는 실제 객체의 로직을 그대로 수행. (부분 모킹) | 순수 단위 테스트에서 일부 메서드만 동작을 변경하고 싶을 때 |
 | `@SpyBean`     | `org.springframework.boot` | Spring Bean | Spring 컨텍스트에 등록된 실제 빈을 Spy 객체로 대체                                  | 통합/슬라이스 테스트에서 실제 빈의 일부 동작만 변경하고 싶을 때 |
@@ -127,3 +129,12 @@
 
 - `@InjectMocks`: Mockito가 관리하는 어노테이션. `@Mock`이나 `@Spy`로 만들어진 가짜 객체를 주입. Spring 컨테이너와 무관하게 동작하며, 주로 단위 테스트에서 사용
 - `@Autowired`: Spring Framework가 관리하는 어노테이션. Spring 컨테이너에 등록된 실제 빈(Bean)을 주입. 통합 테스트나 실제 애플리케이션 코드에서 사용
+
+### 고찰
+
+#### `@MockBean`, `@MockitoBean`, `@SpyBean`,`@MockitoSpyBean` Deprecated 이슈
+- @MockBean대신 @MockitoBean, @SpyBean대신 @MockitoSpyBean 사용하면 된다
+- [해당 이슈 정리](https://www.inflearn.com/community/questions/1557076/mockbean-deprecated)
+
+#### stubbing 해야할 때
+- [해당 내용 정리](https://www.inflearn.com/community/questions/1559940/stubbing%EC%9D%84-%ED%95%B4%EC%A4%98%EC%95%BC-%ED%95%98%EB%8A%94-%EC%9D%B4%EC%9C%A0)
