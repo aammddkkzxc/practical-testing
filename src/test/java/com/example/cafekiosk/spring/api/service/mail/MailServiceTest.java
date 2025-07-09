@@ -35,12 +35,17 @@ class MailServiceTest {
     @Test
     void sendMail() {
         //given
-//        when(mailSendClient.sendEmail(anyString(), anyString(), anyString(), anyString())).thenReturn(true);
+        // mock 옛날 방식 stub
+        //when(mailSendClient.sendEmail(anyString(), anyString(), anyString(), anyString())).thenReturn(true);
+
+        // mock BDD 스타일 stub
+        BDDMockito.given(mailSendClient.sendEmail(anyString(), anyString(), anyString(), anyString()))
+                .willReturn(true);
+
+        // spy 용 stub
 //        doReturn(true)
 //                .when(mailSendClient)
 //                .sendEmail(anyString(), anyString(), anyString(), anyString());
-        BDDMockito.given(mailSendClient.sendEmail(anyString(), anyString(), anyString(), anyString()))
-                .willReturn(true);
 
         //when
         boolean result = mailService.sendMail("", "", "", "");
